@@ -1,2 +1,2 @@
 # CG-Gameboy
-creating a gameboy
+* just a man creating a gameboy :)
