@@ -1,0 +1,47 @@
+﻿  gameboy.cpp
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(37,40): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(39,27): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(39,47): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(39,68): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(40,26): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(40,46): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(495,1): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(532,39): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(532,56): warning C4305: 'inicializando': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(533,28): warning C4838: a conversão de 'double' em 'GLfloat' requer uma conversão de restrição
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(533,28): warning C4244: 'inicializando': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(533,55): warning C4838: a conversão de 'double' em 'GLfloat' requer uma conversão de restrição
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(533,55): warning C4244: 'inicializando': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(584,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(600,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(601,24): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(602,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(603,26): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(607,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(608,24): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(609,24): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(610,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(611,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(622,25): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(624,27): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(625,26): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(626,28): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(639,32): warning C4244: 'argumento': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(639,36): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(675,24): warning C4244: 'argumento': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(722,25): warning C4305: '+=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(723,25): warning C4305: '+=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(724,22): warning C4305: '=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(725,23): warning C4305: '=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(741,25): warning C4305: '-=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(742,25): warning C4305: '-=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(743,22): warning C4305: '=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(744,23): warning C4305: '=': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(753,24): warning C4305: 'argumento': truncamento de 'double' para 'GLfloat'
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(857,22): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(859,22): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(862,20): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(864,20): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(866,19): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
+C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\gameboy.cpp(867,19): warning C4244: '=': conversão de 'double' para 'GLfloat', possível perda de dados
+  Projeto.vcxproj -> C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\Debug\Projeto.exe
