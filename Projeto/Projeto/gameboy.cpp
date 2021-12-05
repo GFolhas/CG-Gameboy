@@ -1,14 +1,18 @@
 /* ===================================================================================
 	Departamento Eng. Informatica - FCTUC
 	Computacao Grafica - 2021/22
-	................................................ JHenriques / APerrotta
-	Trabalho 3 - Visualizacao
+	Projeto Meta 1 - Gonçalo Tavares Antão Folhas Ferreira 2019214765
 ======================================================================================= */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <GL/freeglut.h>
+#include "RgbImage.h"
+
+void initMaterials(int material);
+
+//#include "C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\Debug\RgbImage.h"
 
 //--------------------------------- Definir cores
 #define BLUE     0.0, 0.0, 1.0, 1.0
@@ -25,6 +29,9 @@
 #define SHIPSCALEMAX_Y  0.5
 #define SHIPSCALEMIN_X  0.07
 #define SHIPSCALEMIN_Y  0.35
+
+//------------------------------------------------------------ Skybox
+GLUquadricObj* esfera = gluNewQuadric();
 
 //================================================================================
 //===========================================================Variaveis e constantes
@@ -494,6 +501,51 @@ static GLfloat cor[] = {
 
 };
 
+
+static GLfloat texturas[] = {
+
+//gameboy body
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+1, 0, 1, 1.3, 0, 1.3, 0, 0,
+
+//crossbutton
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+
+//A button
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+1, 0, 1, 1, 0, 1, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+
+//B button
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0,
+1, 0, 1, 1, 0, 1, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0
+};
+
 	
 
 //=========================================================== FACES DA MESA
@@ -534,6 +586,97 @@ GLfloat  obsP[] = { rVisao * cos(aVisao), 0.0, rVisao * sin(aVisao)};
 GLfloat  angZoom = 45;
 GLfloat  incZoom = 3;
 
+RgbImage imag;
+GLuint   texture[5];
+
+GLfloat intensidadeDia = 0.0;
+GLfloat luzGlobalCorAmb[4] = { intensidadeDia, intensidadeDia,intensidadeDia, 1.0 };   // 
+GLint   ligaTeto = 1;		 //:::   'T'  
+GLfloat intensidadeT = 0.3;  //:::   'I'  
+GLint   luzR = 1;		 	 //:::   'R'  
+GLint   luzG = 1;			 //:::   'G'  
+GLint   luzB = 1;			 //:::   'B'  
+GLfloat localPos[4] = { 0.0, 5.0, 0.0, 1.0 };
+GLfloat localCorAmb[4] = { 0, 0, 0, 0.0 };
+GLfloat localCorDif[4] = { luzR, luzG, luzB, 1.0 };
+GLfloat localCorEsp[4] = { luzR, luzG, luzB, 1.0 };
+
+
+
+
+void initTexturas()
+{
+	//----------------------------------------- Chao - tapete
+	glGenTextures(1, &texture[0]);
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/color.bmp");
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // this one is not gud :X
+	glTexImage2D(GL_TEXTURE_2D, 0, 3,
+		imag.GetNumCols(),
+		imag.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+		imag.ImageData());
+
+	//----------------------------------------- Esfera - skybox envolvente
+	glGenTextures(1, &texture[1]);
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/skybox.bmp");
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3,
+		imag.GetNumCols(),
+		imag.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+		imag.ImageData());
+
+	//----------------------------------------- A button
+	glGenTextures(1, &texture[2]);
+	glBindTexture(GL_TEXTURE_2D, texture[2]);
+	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/A.bmp");
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3,
+		imag.GetNumCols(),
+		imag.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+		imag.ImageData());
+
+ 
+	//----------------------------------------- A button
+	glGenTextures(1, &texture[3]);
+	glBindTexture(GL_TEXTURE_2D, texture[3]);
+	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/B.bmp");
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3,
+		imag.GetNumCols(),
+		imag.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+		imag.ImageData());
+
+}
+
+
+void initLights(void) {
+	//…………………………………………………………………………………………………………………………………………… Ambiente
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzGlobalCorAmb);
+
+	//…………………………………………………………………………………………………………………………………………… Teto
+	glLightfv(GL_LIGHT0, GL_POSITION, localPos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, localCorAmb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, localCorDif);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, localCorEsp);
+}
+
 
 
 //================================================================================
@@ -543,6 +686,11 @@ void inicializa(void)
 	glClearColor(BLACK);		//………………………………………………………………………………Apagar
 	glEnable(GL_DEPTH_TEST);	//………………………………………………………………………………Profundidade
 	glShadeModel(GL_SMOOTH);	//………………………………………………………………………………Interpolacao de cores	
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	initLights();
+	initTexturas();
 
 	glVertexPointer(3, GL_FLOAT, 0, vertices); //………………………………………VertexArrays: vertices + normais + cores
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -550,8 +698,22 @@ void inicializa(void)
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glColorPointer(3, GL_FLOAT, 0, cor);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glTexCoordPointer(2, GL_FLOAT, 0, texturas);   // coordenadas textura
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+}
 
 
+
+void iluminacao() {
+	glLightfv(GL_LIGHT0, GL_POSITION, localPos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, localCorAmb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, localCorDif);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, localCorEsp);
+	if (ligaTeto)
+		glEnable(GL_LIGHT0);
+	else
+		glDisable(GL_LIGHT0);
 }
 
 
@@ -559,19 +721,22 @@ void inicializa(void)
 void drawEixos()
 {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Eixo X
-	glColor4f(RED);
+	//glColor4f(RED);
+	initMaterials(15); // 2 is good, 13 too
 	glBegin(GL_LINES);
 		glVertex3i(0, 0, 0);
 		glVertex3i(20, 0, 0);
 	glEnd();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Eixo Y
-	glColor4f(GREEN);
+	//glColor4f(GREEN);
+	initMaterials(14);
 	glBegin(GL_LINES);
 		glVertex3i(0, 0, 0);
 		glVertex3i(0, 20, 0);
 	glEnd();
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Eixo Z
-	glColor4f(BLUE);
+	//glColor4f(BLUE);
+	initMaterials(13);
 	glBegin(GL_LINES);
 		glVertex3i(0, 0, 0);
 		glVertex3i(0, 0, 20);
@@ -580,14 +745,18 @@ void drawEixos()
 }
 
 void drawCube() {
+	initMaterials(16);
 	glPushMatrix(); {
 		glScalef(1.0, 1.7, 0.3);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture[0]);
+		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, tras);
+		glDisable(GL_TEXTURE_2D);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, cima);   // desenhar a face de cima do gameboy
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, esq);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, dir);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, baixo);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, frente);
-		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, tras);
 	}glPopMatrix();
 
 
@@ -595,20 +764,22 @@ void drawCube() {
 
 
 void drawScreen() {
+	initMaterials(12);
 	glBegin(GL_POLYGON);  // Dark outline on the screen
-	glColor3f(0, 0, 0);
-	glVertex3f(4, -0.5, 1.6);
-	glVertex3f(4, 7.5, 1.6);
-	glVertex3f(-4, 7.5, 1.6);
-	glVertex3f(-4, -0.5, 1.6);
+		//glColor3f(0, 0, 0);
+		glVertex3f(4, -0.5, 1.6);
+		glVertex3f(4, 7.5, 1.6);
+		glVertex3f(-4, 7.5, 1.6);
+		glVertex3f(-4, -0.5, 1.6);
 	glEnd();
 
+	initMaterials(10);
 	glBegin(GL_POLYGON);  // Screen
-	glColor3f(0.2, 0.5, 0.1);
-	glVertex3f(3.5, 0, 1.7);
-	glVertex3f(3.5, 7, 1.7);
-	glVertex3f(-3.5, 7, 1.7);
-	glVertex3f(-3.5, 0, 1.7);
+		//glColor3f(0.2, 0.5, 0.1);
+		glVertex3f(3.5, 0, 1.7);
+		glVertex3f(3.5, 7, 1.7);
+		glVertex3f(-3.5, 7, 1.7);
+		glVertex3f(-3.5, 0, 1.7);
 	glEnd();
 
 }
@@ -619,12 +790,13 @@ void drawShip() {
 		glTranslatef(ship_x, ship_y, 0);
 		glScalef(ship_scale_x, ship_scale_y, 1);
 		glBegin(GL_POLYGON);  // My ship
-			glColor3f(0, 0.8, 0.9);
-			//glVertex3f(4, -0.5, 2);
-			glVertex3f(4, 7.5, 1.85);
-			glVertex3f(0, 10, 1.85);
-			glVertex3f(-4, 7.5, 1.85);
-			//glVertex3f(-4, -0.5, 2);
+			//glColor3f(0, 0.8, 0.9);
+			glColor3f(1, 0, 0);
+			//glVertex3f(4, -0.5, 1.75);
+			glVertex3f(4, 7.5, 1.75);
+			glVertex3f(0, 10, 1.75);
+			glVertex3f(-4, 7.5, 1.75);
+			//glVertex3f(-4, -0.5, 1.75);
 		glEnd();
 	}glPopMatrix();
 
@@ -632,6 +804,7 @@ void drawShip() {
 
 
 void drawCrossButton() {
+	initMaterials(9);
 	glPushMatrix(); {
 		glTranslatef(-2.5, -4, 1.5);
 		glRotatef(rotAngleX, 1, 0, 0);
@@ -658,6 +831,9 @@ void drawCrossButton() {
 void drawAB(float xt, float yt, float zt) {
 
 	// Button A
+	//glEnable(GL_TEXTURE_2D);
+	//glBindTexture(GL_TEXTURE_2D, texture[1]);
+	initMaterials(9);
 	glPushMatrix(); {
 		glTranslatef(xt, yt, zt + A);
 		glRotatef(45, 0, 0, -1);
@@ -666,9 +842,13 @@ void drawAB(float xt, float yt, float zt) {
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, esqA);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, dirA);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, baixoA);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture[2]);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, frenteA);
+		glDisable(GL_TEXTURE_2D);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, trasA);
 	}glPopMatrix();
+	//glDisable(GL_TEXTURE_2D);
 
 	// Button B
 	glPushMatrix(); {
@@ -679,11 +859,30 @@ void drawAB(float xt, float yt, float zt) {
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, esqA);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, dirA);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, baixoA);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture[3]);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, frenteA);
+		glDisable(GL_TEXTURE_2D);
 		glDrawElements(GL_POLYGON, 4, GL_UNSIGNED_INT, trasA);
 	}glPopMatrix();
 }
 
+
+void drawEsfera()
+{
+	//------------------------- Esfera
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+	glPushMatrix();
+	//glTranslatef(2, 4, 2);
+	glRotatef(-90, 1, 0, 0);
+	gluQuadricDrawStyle(esfera, GLU_FILL);
+	gluQuadricNormals(esfera, GLU_SMOOTH);
+	gluQuadricTexture(esfera, GL_TRUE);
+	gluSphere(esfera, 60.0, 100, 100);
+	glPopMatrix();
+	glDisable(GL_TEXTURE_2D);
+}
 
 
 void all() {
@@ -749,8 +948,8 @@ void all() {
 	}
 
 
-
 	glScalef(0.2, 0.2, 0.2);
+	drawEsfera();
 	drawScreen();
 	drawShip();
 	drawCube();
@@ -853,22 +1052,25 @@ void keyboard(unsigned char key, int x, int y) {
 
 void teclasNotAscii(int key, int x, int y) {
 
-	if (key == GLUT_KEY_UP)
-		obsP[1] = (obsP[1] + 0.8);
-	if (key == GLUT_KEY_DOWN)
-		obsP[1] = (obsP[1] - 0.8);
+	if (!fullscreen) {
 
-	if (key == GLUT_KEY_LEFT)
-		aVisao = (aVisao + 0.3);
-	if (key == GLUT_KEY_RIGHT)
-		aVisao = (aVisao - 0.3);
+		if (key == GLUT_KEY_UP)
+			obsP[1] = (obsP[1] + 0.8);
+		if (key == GLUT_KEY_DOWN)
+			obsP[1] = (obsP[1] - 0.8);
 
-	obsP[0] = rVisao * cos(aVisao);
-	obsP[2] = rVisao * sin(aVisao);
+		if (key == GLUT_KEY_LEFT)
+			aVisao = (aVisao + 0.3);
+		if (key == GLUT_KEY_RIGHT)
+			aVisao = (aVisao - 0.3);
 
-	
-	glutPostRedisplay();
+		obsP[0] = rVisao * cos(aVisao);
+		obsP[2] = rVisao * sin(aVisao);
+
+		glutPostRedisplay();
+	}
 }
+
 
 
 //======================================================= MAIN
