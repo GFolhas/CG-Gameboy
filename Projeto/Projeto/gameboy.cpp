@@ -11,6 +11,7 @@
 #include "RgbImage.h"
 
 void initMaterials(int material);
+void alphaChange();
 
 //#include "C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\Debug\RgbImage.h"
 
@@ -649,7 +650,7 @@ void initTexturas()
 		imag.ImageData());
 
  
-	//----------------------------------------- A button
+	//----------------------------------------- B button
 	glGenTextures(1, &texture[3]);
 	glBindTexture(GL_TEXTURE_2D, texture[3]);
 	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/B.bmp");
@@ -767,6 +768,7 @@ void drawScreen() {
 	initMaterials(12);
 	glBegin(GL_POLYGON);  // Dark outline on the screen
 		//glColor3f(0, 0, 0);
+		glNormal3d(0, 0, 1);
 		glVertex3f(4, -0.5, 1.6);
 		glVertex3f(4, 7.5, 1.6);
 		glVertex3f(-4, 7.5, 1.6);
@@ -776,6 +778,7 @@ void drawScreen() {
 	initMaterials(10);
 	glBegin(GL_POLYGON);  // Screen
 		//glColor3f(0.2, 0.5, 0.1);
+		glNormal3d(0, 0, 1);
 		glVertex3f(3.5, 0, 1.7);
 		glVertex3f(3.5, 7, 1.7);
 		glVertex3f(-3.5, 7, 1.7);
@@ -785,7 +788,23 @@ void drawScreen() {
 }
 
 
+void drawGlass() {
+	initMaterials(1);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBegin(GL_POLYGON);  // Screen
+		glNormal3d(0, 0, 1);
+		glVertex3f(3.5, 0, 1.7);
+		glVertex3f(3.5, 7, 1.7);
+		glVertex3f(-3.5, 7, 1.7);
+		glVertex3f(-3.5, 0, 1.7);
+	glEnd();
+	glDisable(GL_BLEND);
+}
+
+
 void drawShip() {
+	initMaterials(4);
 	glPushMatrix(); {
 		glTranslatef(ship_x, ship_y, 0);
 		glScalef(ship_scale_x, ship_scale_y, 1);
@@ -955,6 +974,9 @@ void all() {
 	drawCube();
 	drawAB(1.5, -4.25, 1.75);
 	drawCrossButton();
+	glTranslatef(0, 0, 0.1);
+	drawGlass();
+	glTranslatef(0, 0, -0.1);
 }
 
 
@@ -1000,6 +1022,13 @@ void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 
 		//--------------------------- CrossButton Keyboard
+
+		case 'T':
+		case 't':
+			alphaChange();
+			glutPostRedisplay();
+			break;
+
 
 		case 'W':
 		case 'w':

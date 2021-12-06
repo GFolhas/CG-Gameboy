@@ -1,5 +1,8 @@
 #include <GL\freeglut.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "materiais.h"
+
 
 void initMaterials(int material) {
 
@@ -10,7 +13,7 @@ void initMaterials(int material) {
 			glMaterialfv(GL_FRONT, GL_SPECULAR, esmeraldSpec);
 			glMaterialf(GL_FRONT, GL_SHININESS, esmeraldCoef);
 			break;
-		case 1: //……………………………………………………………………………………………jade
+		case 1: //……………………………………………………………………………………………transparent
 			glMaterialfv(GL_FRONT, GL_AMBIENT, jadeAmb);
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, jadeDif);
 			glMaterialfv(GL_FRONT, GL_SPECULAR, jadeSpec);
@@ -113,4 +116,14 @@ void initMaterials(int material) {
 			glMaterialf(GL_FRONT, GL_SHININESS, yellowPlasticCoef);
 			break;	
 	}
+}
+
+void alphaChange() {
+	if (alpha < 1) {
+		alpha += 0.1;
+		printf("%f\n", alpha);
+	}
+	else alpha = 0;
+
+	jadeDif[3] = alpha;
 }
