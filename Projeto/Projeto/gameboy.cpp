@@ -34,6 +34,14 @@ void alphaChange();
 //------------------------------------------------------------ Skybox
 GLUquadricObj* esfera = gluNewQuadric();
 
+//------------------------------------------------------------ Focos
+
+bool 		Focos[] = {1,1};		//.. Dois Focos ligados ou desligados
+GLfloat		aberturaFoco = 10.0;		//.. angulo inicial do foco
+GLfloat		anguloINC = 3.0;		//.. incremento
+GLfloat		anguloMIN = 3.0;		//.. minimo
+GLfloat		anguloMAX = 70.0;		//.. maximo
+
 //================================================================================
 //===========================================================Variaveis e constantes
 
@@ -602,6 +610,9 @@ GLfloat localCorAmb[4] = { 0, 0, 0, 0.0 };
 GLfloat localCorDif[4] = { luzR, luzG, luzB, 1.0 };
 GLfloat localCorEsp[4] = { luzR, luzG, luzB, 1.0 };
 
+GLfloat Pos1[] = { 0.0f, 1.0f,  1.0f, 1.0f };   // Foco 1
+bool foco = true;
+
 
 
 
@@ -667,7 +678,28 @@ void initTexturas()
 }
 
 
+
 void initLights(void) {
+
+
+	GLfloat Foco_direccao[] = { 0, 0, -1, 0 };	//……… -Z
+	GLfloat Foco1_cor[] = { 0, 1,  0, 1 };	//……… Cor da luz 1
+	GLfloat Foco_ak = 1.0;
+	GLfloat Foco_al = 0.05f;
+	GLfloat Foco_aq = 0.0f;
+	GLfloat Foco_Expon = 2.0;		// Foco, SPOT_Exponent
+
+	//……………………………………………………………………………………………………………………………Foco Esquerda
+	glLightfv(GL_LIGHT1, GL_POSITION, Pos1);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, Foco1_cor);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, Foco_ak);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, Foco_al);
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, Foco_aq);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, aberturaFoco);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, Foco_direccao);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, Foco_Expon);
+
+
 	//…………………………………………………………………………………………………………………………………………… Ambiente
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzGlobalCorAmb);
 
@@ -676,6 +708,8 @@ void initLights(void) {
 	glLightfv(GL_LIGHT0, GL_AMBIENT, localCorAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, localCorDif);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, localCorEsp);
+
+
 }
 
 
@@ -690,6 +724,7 @@ void inicializa(void)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 	initLights();
 	initTexturas();
 
@@ -705,7 +740,7 @@ void inicializa(void)
 }
 
 
-
+/*
 void iluminacao() {
 	glLightfv(GL_LIGHT0, GL_POSITION, localPos);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, localCorAmb);
@@ -715,7 +750,7 @@ void iluminacao() {
 		glEnable(GL_LIGHT0);
 	else
 		glDisable(GL_LIGHT0);
-}
+}*/
 
 
 
@@ -775,7 +810,7 @@ void drawScreen() {
 		glVertex3f(-4, -0.5, 1.6);
 	glEnd();
 
-	initMaterials(10);
+	initMaterials(0);
 	glBegin(GL_POLYGON);  // Screen
 		//glColor3f(0.2, 0.5, 0.1);
 		glNormal3d(0, 0, 1);
@@ -997,6 +1032,26 @@ void display(void) {
 	//================================================================= Não modificar !!!!!!!!!!!!
 
 	gluLookAt(obsP[0], obsP[1], obsP[2], 0, 0, 0, 0, 1, 0);
+
+	//============================================Esferasverde e vermelha
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
+	//…………………………………………………………………………………Verde
+	if (Focos[0]) {
+		glPushMatrix();
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glTranslatef(Pos1[0], Pos1[1], Pos1[2]);
+		//glutSolidSphere(0.1f, 100, 100);
+		glPopMatrix();
+	}
+	//…………………………………………………………………………………Vermelha
+
+
+	//============================================ Grelha de polionos (dim*dim)
+	//============================================ O ponto minimo   e (0,0), o maximo (2,2)
+	//============================================ A textura minimo e (0,0), o maximo (1,1)
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 	   
 
 	//…………………………………………………………………………………………………………………………………………………………Objectos
@@ -1022,6 +1077,7 @@ void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 
 		//--------------------------- CrossButton Keyboard
+
 
 		case 'T':
 		case 't':
@@ -1074,6 +1130,43 @@ void keyboard(unsigned char key, int x, int y) {
 		case 27:
 			exit(0);
 			break;
+
+		case 'G':
+		case 'g':
+			Focos[0] = !Focos[0];
+			if (Focos[0] == 0)
+				glDisable(GL_LIGHT0);
+			else
+				glEnable(GL_LIGHT0);
+			glutPostRedisplay();
+			break;
+
+		case 'O':
+		case 'o':
+			aberturaFoco = aberturaFoco + anguloINC;
+			if (aberturaFoco > anguloMAX)
+				aberturaFoco = anguloMAX;
+			glutPostRedisplay();
+			break;
+
+		case 'L':
+		case 'l':
+			aberturaFoco = aberturaFoco - anguloINC;
+			if (aberturaFoco < anguloMIN)
+				aberturaFoco = anguloMIN;
+			glutPostRedisplay();
+			break;
+			
+		case 'j':
+		case 'J':
+			if (foco) {
+				foco = false;
+				glDisable(GL_LIGHT1);
+			}
+			else {
+				glEnable(GL_LIGHT1);
+				foco = true;
+			}
 	}
 
 }
