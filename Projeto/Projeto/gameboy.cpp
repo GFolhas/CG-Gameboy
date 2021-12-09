@@ -12,6 +12,7 @@
 
 void initMaterials(int material);
 void alphaChange();
+extern GLfloat alpha;
 
 //#include "C:\Users\35192\Documents\UNI\3rd Year\1st Semester\CG\Projeto\Projeto\Debug\RgbImage.h"
 
@@ -32,15 +33,19 @@ void alphaChange();
 #define SHIPSCALEMIN_Y  0.35
 
 //------------------------------------------------------------ Skybox
-GLUquadricObj* esfera = gluNewQuadric();
+//GLUquadricObj* esfera = gluNewQuadric();
 
 //------------------------------------------------------------ Focos
 
-bool 		Focos[] = {1,1};		//.. Dois Focos ligados ou desligados
+bool 		Focos[] = {1};		//.. Dois Focos ligados ou desligados
 GLfloat		aberturaFoco = 10.0;		//.. angulo inicial do foco
 GLfloat		anguloINC = 3.0;		//.. incremento
 GLfloat		anguloMIN = 3.0;		//.. minimo
 GLfloat		anguloMAX = 70.0;		//.. maximo
+
+
+//------------------------------------------------------------ Texto
+char     texto[30];
 
 //================================================================================
 //===========================================================Variaveis e constantes
@@ -606,12 +611,13 @@ GLint   luzR = 1;		 	 //:::   'R'
 GLint   luzG = 1;			 //:::   'G'  
 GLint   luzB = 1;			 //:::   'B'  
 GLfloat localPos[4] = { 0.0, 5.0, 0.0, 1.0 };
-GLfloat localCorAmb[4] = { 0, 0, 0, 0.0 };
+GLfloat localCorAmb[4] = { 0.2, 0.2, 0.2, 0.0 };
 GLfloat localCorDif[4] = { luzR, luzG, luzB, 1.0 };
 GLfloat localCorEsp[4] = { luzR, luzG, luzB, 1.0 };
 
 GLfloat Pos1[] = { 0.0f, 1.0f,  1.0f, 1.0f };   // Foco 1
 bool foco = true;
+bool direct = true;
 
 
 
@@ -622,18 +628,18 @@ void initTexturas()
 	glGenTextures(1, &texture[0]);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/color.bmp");
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // this one is not gud :X
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
 	glTexImage2D(GL_TEXTURE_2D, 0, 3,
 		imag.GetNumCols(),
 		imag.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE,
 		imag.ImageData());
 
 	//----------------------------------------- Esfera - skybox envolvente
-	glGenTextures(1, &texture[1]);
+	/*glGenTextures(1, &texture[1]);
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/skybox.bmp");
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
@@ -644,13 +650,13 @@ void initTexturas()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3,
 		imag.GetNumCols(),
 		imag.GetNumRows(), 0, GL_RGB, GL_UNSIGNED_BYTE,
-		imag.ImageData());
+		imag.ImageData());*/
 
 	//----------------------------------------- A button
 	glGenTextures(1, &texture[2]);
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
 	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/A.bmp");
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -665,7 +671,7 @@ void initTexturas()
 	glGenTextures(1, &texture[3]);
 	glBindTexture(GL_TEXTURE_2D, texture[3]);
 	imag.LoadBmpFile("C:/Users/35192/Documents/UNI/3rd Year/1st Semester/CG/Projeto/Projeto/Debug/B.bmp");
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -680,6 +686,7 @@ void initTexturas()
 
 
 void initLights(void) {
+
 
 
 	GLfloat Foco_direccao[] = { 0, 0, -1, 0 };	//……… -Z
@@ -740,17 +747,11 @@ void inicializa(void)
 }
 
 
-/*
-void iluminacao() {
-	glLightfv(GL_LIGHT0, GL_POSITION, localPos);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, localCorAmb);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, localCorDif);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, localCorEsp);
-	if (ligaTeto)
-		glEnable(GL_LIGHT0);
-	else
-		glDisable(GL_LIGHT0);
-}*/
+void desenhaTexto(char* string, GLfloat x, GLfloat y, GLfloat z) {
+	glRasterPos3f(x, y, z);
+	while (*string)
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *string++);
+}
 
 
 
@@ -921,7 +922,7 @@ void drawAB(float xt, float yt, float zt) {
 	}glPopMatrix();
 }
 
-
+/*
 void drawEsfera()
 {
 	//------------------------- Esfera
@@ -937,6 +938,7 @@ void drawEsfera()
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 }
+*/
 
 
 void all() {
@@ -1003,7 +1005,7 @@ void all() {
 
 
 	glScalef(0.2, 0.2, 0.2);
-	drawEsfera();
+	//drawEsfera();
 	drawScreen();
 	drawShip();
 	drawCube();
@@ -1023,6 +1025,32 @@ void display(void) {
 
 
 	//================================================================= Não modificar !!!!!!!!!!!!
+	glDisable(GL_LIGHTING);
+	glViewport(fullScreenX, fullScreenY, wScreen, hScreen);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//glOrtho(-xC, xC, -xC, xC, -zC, zC);
+	gluPerspective(angZoom, (float)wScreen / hScreen, 0.1, 3 * zC);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	//================================================================= Não modificar !!!!!!!!!!!!
+	gluLookAt(obsP[0], obsP[1], obsP[2], 0, 0, 0, 0, 1, 0);
+
+
+
+	//…………………………………………………………………………………………………………………………………………………………Texto
+	glColor3f(1, 1, 1);
+	if (foco) { sprintf_s(texto, 30, "Foco 'F' - ON"); }
+	else { sprintf_s(texto, 30, "Foco 'F' - OFF"); }
+	desenhaTexto(texto, -12, 1, -14);
+	if (direct) { sprintf_s(texto, 30, "Lighting 'L' - ON"); }
+	else { sprintf_s(texto, 30, "Lighting 'L' - OFF"); }
+	desenhaTexto(texto, -12, 1, -8);
+	sprintf_s(texto, 30, "Transparency 'T' - %.2f", alpha);
+	desenhaTexto(texto, -12, 1, -2);
+
+
+	//================================================================= Não modificar !!!!!!!!!!!!
 	glViewport(fullScreenX, fullScreenY, wScreen, hScreen);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -1030,8 +1058,10 @@ void display(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//================================================================= Não modificar !!!!!!!!!!!!
-
 	gluLookAt(obsP[0], obsP[1], obsP[2], 0, 0, 0, 0, 1, 0);
+
+
+
 
 	//============================================Esferasverde e vermelha
 	glDisable(GL_TEXTURE_2D);
@@ -1044,7 +1074,7 @@ void display(void) {
 		//glutSolidSphere(0.1f, 100, 100);
 		glPopMatrix();
 	}
-	//…………………………………………………………………………………Vermelha
+
 
 
 	//============================================ Grelha de polionos (dim*dim)
@@ -1052,7 +1082,7 @@ void display(void) {
 	//============================================ A textura minimo e (0,0), o maximo (1,1)
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
-	   
+
 
 	//…………………………………………………………………………………………………………………………………………………………Objectos
 	drawEixos();
@@ -1126,39 +1156,24 @@ void keyboard(unsigned char key, int x, int y) {
 			break;
 
 
-		//--------------------------- Escape
-		case 27:
-			exit(0);
-			break;
 
-		case 'G':
-		case 'g':
-			Focos[0] = !Focos[0];
-			if (Focos[0] == 0)
-				glDisable(GL_LIGHT0);
-			else
-				glEnable(GL_LIGHT0);
-			glutPostRedisplay();
-			break;
-
-		case 'O':
-		case 'o':
-			aberturaFoco = aberturaFoco + anguloINC;
-			if (aberturaFoco > anguloMAX)
-				aberturaFoco = anguloMAX;
-			glutPostRedisplay();
-			break;
+		//--------------------------- Lighting
 
 		case 'L':
 		case 'l':
-			aberturaFoco = aberturaFoco - anguloINC;
-			if (aberturaFoco < anguloMIN)
-				aberturaFoco = anguloMIN;
+			if (direct) {
+				direct = false;
+				glDisable(GL_LIGHT0);
+			}
+			else {
+				direct = true;
+				glEnable(GL_LIGHT0);
+			}
 			glutPostRedisplay();
 			break;
 			
-		case 'j':
-		case 'J':
+		case 'F':
+		case 'f':
 			if (foco) {
 				foco = false;
 				glDisable(GL_LIGHT1);
@@ -1167,6 +1182,14 @@ void keyboard(unsigned char key, int x, int y) {
 				glEnable(GL_LIGHT1);
 				foco = true;
 			}
+			break;
+
+
+		//--------------------------- Escape
+
+		case 27:
+			exit(0);
+			break;
 	}
 
 }
@@ -1202,7 +1225,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(wScreen, hScreen);
 	glutInitWindowPosition(300, 100);
-	glutCreateWindow("gameboy color");
+	glutCreateWindow("gameboy color - WASD (arrow movement) - X and Z (A & B buttons) - UpDownLeftRight (spin gameboy) - F (Foco) - L (Directional Lighting)");
 
 	inicializa();
 
